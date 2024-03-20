@@ -1,0 +1,62 @@
+.Auth {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+    gap: 4rem;
+    position: relative;
+}
+.root{
+    background-image: url("../../images/bg2.jpg");
+    height: 100vh; 
+    color: rgb(46, 1, 105);
+}
+  
+.Auth > div {
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    justify-content: center;
+    background-color: rgba(200, 200, 200, 0.2); /* Light gray with 20% transparency */
+    padding: 1.5rem;
+    gap: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adding a box shadow */
+}
+
+  
+.infoInput {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* Decreased the gap */
+    box-shadow: 0 0 5px 0px #0000001a;
+    padding: 10px;
+    border-radius: 1rem;
+    background-color: rgba(87, 1, 247, 0.1);
+    border: none;
+    /* Transparent background */
+}
+
+.infoInput > input {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    border-bottom: 1px solid gray;
+}
+
+.infoInputGroup {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  /* right side */
+  .authForm{
+      background-color: var(--cardColor);
+      border-radius: 1rem;
+      padding: 1rem;
+  }
+  
+  .authForm>div{
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+  }
