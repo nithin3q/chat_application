@@ -1,4 +1,4 @@
-import UserModel from "../models/UserModel.js";
+import UserModel from "../Models/UserModels.js";
 import ChatModel from '../Models/ChatModel.js'
 
 import bcrypt from "bcrypt";
