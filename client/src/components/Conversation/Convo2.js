@@ -8,7 +8,8 @@ const Conversation = ({ data, currentUser, online }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const userId = data?._id;
+    const userId = data._id; // Assuming the userId is stored in the _id field
+    console.log("User ID:", userId); // Check if the userId is correct
     const getUserData = async () => {
       try {
         const { data } = await getUser(userId);
@@ -18,9 +19,10 @@ const Conversation = ({ data, currentUser, online }) => {
         console.log(error);
       }
     };
-
+  
     getUserData();
-  }, [currentUser, data.members, dispatch]);
+  }, [data, dispatch]);
+  
 
   return (
     <>

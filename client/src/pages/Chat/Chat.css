@@ -152,3 +152,122 @@
     align-self: center;
     cursor: pointer;
 }
+.logOut-button {
+  position: fixed;
+  bottom: 20px; /* Adjust bottom spacing as needed */
+  left: 20px; /* Adjust left spacing as needed */
+  background-color: #fff;
+  padding: 10px 25px 10px 25px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  background: linear-gradient(98.63deg, #f98500 0%, #f93535 100%);
+  color: white;
+
+}
+.logOut-button:hover {
+  background: linear-gradient(98.63deg, #f93535 0%, #f98500 100%);
+  color: rgb(0, 0, 0);
+}.chat-headers {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  text-decoration: underline;
+}
+.user-info:hover {
+  cursor: pointer;
+  color: #f70a0a;
+}
+
+.chat-header-left {
+  flex-grow: 1; /* Allow the "Chat Box" header to take up remaining space */
+  text-align: center; /* Center-align the "Chat Box" header */
+}
+
+
+/* User Info Modal */
+.user-info-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px; /* Adjust width as needed */
+  height: 200px; /* Adjust height as needed */
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-body {
+  display: flex;
+  align-items: center;
+}
+
+.modal-body img {
+  margin-right: 20px;
+}
+
+.modal-footer {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.modal-footer button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.modal-footer button:hover {
+  background-color: #0056b3;
+}
+
+/* Other Styles */
+.user-info {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-right: 20px;
+}
+
+.user-info img {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+.user_infos {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 5px 0;
+  margin-left: 100px;
+  color: #007bff; /* Adjust margin as needed */
+}
+
+.user_infos  {
+  margin: 5px 0; /* Adjust margin as needed */
+}

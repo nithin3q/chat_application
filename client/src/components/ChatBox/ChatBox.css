@@ -99,19 +99,4 @@
     color: white;
 
 }
-.logOut-button{
-    display: flex;   
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    width: 50%;
-    height: 100%;
-    border-radius: 0.5rem;
-    padding: 0px 15px 0px 15px;
-    font-weight: bold;
-    background: linear-gradient(98.63deg, #f98500 0%, #f93535 100%);
-    color: white;
-    margin-top: 500px;
-    margin-left: 50px;
-}
 

@@ -1,4 +1,5 @@
 import UserModel from "../models/userModel.js";
+import ChatModel from '../Models/ChatModel.js'
 
 import bcrypt from "bcrypt";
 // import jwt from 'jsonwebtoken'

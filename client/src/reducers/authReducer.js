@@ -20,22 +20,12 @@ const authReducer = (
 
       case "LOG_OUT":
       localStorage.clear();
-      // Clear site data (if needed)
-      // You might want to clear other data or perform additional actions here
-      // Example: sessionStorage.clear();
-
-      // Navigate to a blank page before closing the tab
       window.location.href = "http://localhost:3000/";
       
       // Close the tab
       window.close();
-      return {
-        ...state,
-        authData: null,
-        loading: false,
-        error: false,
-        updateLoading: false,
-      };
+      return {...state,  authData: null, loading: false, error: false, updateLoading: false }
+
 
   
     default:
