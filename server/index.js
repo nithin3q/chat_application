@@ -22,7 +22,7 @@ const server = http.createServer(app);
 // Initialize Socket.IO with the HTTP server
 const io = new Server(server, {
   cors: {
-    origin: "https://chat-frontend-topaz.vercel.app/",
+    origin: "*",
   },
 });
 
