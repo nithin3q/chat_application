@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 
-const API = axios.create({ baseURL: 'http://127.0.0.1:5000' });
+const API = axios.create({ baseURL: 'https://chat-project-mern-backend-nithin3qs-projects.vercel.app' });
 
 export const logIn= (formData)=> API.post('/auth/login',formData);
 

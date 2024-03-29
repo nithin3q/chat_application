@@ -76,7 +76,7 @@ const Chat = () => {
   
   // Connect to Socket.io
   useEffect(() => {
-    socket.current = io("ws://localhost:5000");
+    socket.current = io("ws://chat-project-mern-backend-nithin3qs-projects.vercel.app/");
     socket.current.emit("new-user-add", user._id);
     socket.current.on("get-users", (users) => {
       setOnlineUsers(users);
