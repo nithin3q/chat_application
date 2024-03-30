@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = axios.create({ baseURL: "https://chat-project-mern-backend-nithin3qs-projects.vercel.app" });
+const API = axios.create({ baseURL: "http://localhost:5000" });
 
 export const createChat = (data) => API.post('/chat/', data);
 

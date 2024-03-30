@@ -8,7 +8,7 @@ import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import http from "http"; // Import the 'http' module for creating an HTTP server
 import { Server } from "socket.io"; // Import the 'Server' class from 'socket.io'
-
+import path from "path";
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -18,7 +18,6 @@ app.use(cors());
 
 // Create an HTTP server instance using the Express app
 const server = http.createServer(app);
-
 // Initialize Socket.IO with the HTTP server
 const io = new Server(server, {
   cors: {
@@ -34,6 +33,28 @@ app.use('/chat', ChatRoute);
 app.use('/auth', AuthRoute);
 app.use('/message', MessageRoute);
 app.use('/user', UserRoute);
+
+const __dirname1 = path.resolve();
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname1, "/client/build")));
+
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname1, "client", "build", "index.html"))
+  );
+} else {
+  app.use(express.static(path.join(__dirname1, "/client/build")));
+
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname1, "client", "build", "index.html"))
+  );
+}
+
+// --------------------------deployment------------------------------
+
+// Error Handling middlewares
+// app.use(notFound);
+// app.use(errorHandler);
 
 // Define Socket.IO logic within the same file
 let activeUsers = [];
