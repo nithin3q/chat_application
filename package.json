@@ -6,7 +6,7 @@
     "scripts": {
       "start": "node server/index.js",
       "server": "nodemon server/index.js",
-      "build": "npm install --legacy-peer-deps && npm install --legacy-peer-deps --prefix client && npm run build --prefix client"
+      "build": "npm install && npm install client"
     },
     "keywords": [
       "mern",
