@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { getUser } from "../../api/UserRequest";
 import defaultProfileImage from "../../images/defaultProfile.png";
-import { useDispatch } from 'react-redux';
 
 const Conversation = ({ data, currentUser, online }) => {
   const [userData, setUserData] = useState(null);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     const userId = data?._id;
@@ -13,14 +11,14 @@ const Conversation = ({ data, currentUser, online }) => {
       try {
         const { data } = await getUser(userId);
         setUserData(data);
-        dispatch({ type: "SAVE_USER", data: data });
+      
       } catch (error) {
         console.log(error);
       }
     };
 
     getUserData();
-  }, [currentUser, data.members, dispatch]);
+  }, [data._id]);
 
   return (
     <>

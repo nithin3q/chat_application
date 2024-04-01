@@ -5,19 +5,17 @@ import { addMessage, getMessages } from "../../api/MessageRequests";
 import { format } from "timeago.js";
 import "./ChatBox.css";
 import InputEmoji from "react-input-emoji";
-import Typing from "./Typing";
 
 const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, socket }) => {
   const [userData, setUserData] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const [isTyping, setIsTyping] = useState(false); // State to track if the user is typing
   const scroll = useRef();
 
   const handleChange = (newMessage) => {
     setNewMessage(newMessage);
     // Set typing state to true when user starts typing
-    setIsTyping(true);
+    
   };
 
   useEffect(() => {

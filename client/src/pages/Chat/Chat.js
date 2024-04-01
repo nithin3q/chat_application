@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useSelector } from "react-redux";
 import "./Chat.css";
-import { userChats } from "../../api/ChatRequests";
+// import { userChats } from "../../api/ChatRequests";
 import Conversation from "../../components/Conversation/Conversation";
 import ChatBox from "../../components/ChatBox/ChatBox";
 import { io } from "socket.io-client";
@@ -17,7 +17,7 @@ import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons'
 const Chat = () => {
   const user = useSelector((state) => state.authReducer.authData);
   const [users, setUsers] = useState([]);
-  const [chats, setChats] = useState([]);
+  // const [chats, setChats] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [sendMessage, setSendMessage] = useState(null); // Define sendMessage state here
@@ -30,17 +30,17 @@ const Chat = () => {
   
 
   // Get the chat in chat section
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data } = await userChats(user._id);
-        setChats(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, [user._id]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const { data } = await userChats(user._id);
+  //       // setChats(data);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, [user._id]);
 
   // Get all users
   useEffect(() => {
