@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = axios.create({ baseURL: "http://localhost:5000" });
+const API = axios.create({ baseURL: "https://chat-application-qd00.onrender.com/" });
 export const getUser = (userId) => API.get(`/user/${userId}`);
 export const getAllUser = ()=> API.get('/user')
 
