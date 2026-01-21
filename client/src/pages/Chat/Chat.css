@@ -80,14 +80,6 @@
   }
   
   
-  @media screen and (max-width: 768px) {
-   .Chat {
-      grid-template-columns: 16% auto;
-    }
-     .follower.conversation>div>.name{
-      display: none;
-     }
-  }
 
 
   /* extras */
@@ -270,4 +262,102 @@
 
 .user_infos  {
   margin: 5px 0; /* Adjust margin as needed */
+}
+
+/* Back button styles */
+.back-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px 12px;
+  font-size: 24px;
+  color: #333;
+  display: none;
+  transition: transform 0.2s;
+}
+
+.back-button:hover {
+  transform: scale(1.1);
+}
+
+.back-arrow {
+  font-weight: bold;
+}
+
+/* Mobile responsive styles */
+@media screen and (max-width: 768px) {
+  .Chat {
+    grid-template-columns: 1fr;
+  }
+
+  /* Show/hide sidebar on mobile */
+  .Left-side-chat {
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    z-index: 10;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .Left-side-chat.show-sidebar {
+    transform: translateX(0);
+  }
+
+  .Left-side-chat.hide-sidebar {
+    transform: translateX(-100%);
+  }
+
+  /* Show/hide chat on mobile */
+  .Right-side-chat {
+    width: 100%;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .Right-side-chat.show-chat {
+    opacity: 1;
+    z-index: 5;
+  }
+
+  .Right-side-chat.hide-chat {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Show back button on mobile */
+  .back-button {
+    display: inline-block;
+    position: absolute;
+    left: 10px;
+  }
+
+  .chat-header-left {
+    position: relative;
+    text-align: center;
+  }
+
+  .chat-header-left h2 {
+    margin: 0;
+  }
+
+  /* Adjust logout button for mobile */
+  .logOut-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 20;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  /* Desktop: Always show both columns */
+  .Left-side-chat.show-sidebar,
+  .Left-side-chat.hide-sidebar {
+    transform: none;
+  }
+
+  .Right-side-chat.show-chat,
+  .Right-side-chat.hide-chat {
+    opacity: 1;
+    pointer-events: all;
+  }
 }

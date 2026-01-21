@@ -84,6 +84,46 @@ io.on("connection", (socket) => {
     }
   });
 
+  // Typing indicator events
+  socket.on("typing-start", (data) => {
+    const { receiverId, senderId } = data;
+    const user = activeUsers.find((user) => user.userId === receiverId);
+    if (user) {
+      io.to(user.socketId).emit("user-typing", { userId: senderId, chatId: data.chatId });
+    }
+  });
+
+  socket.on("typing-stop", (data) => {
+    const { receiverId, senderId } = data;
+    const user = activeUsers.find((user) => user.userId === receiverId);
+    if (user) {
+      io.to(user.socketId).emit("user-stopped-typing", { userId: senderId, chatId: data.chatId });
+    }
+  });
+
+  // Reaction events
+  socket.on("reaction-added", async (data) => {
+    const { receiverId, messageId } = data;
+
+    try {
+      // Fetch the updated message with all reactions from database
+      const MessageModel = (await import('./Models/MessageModel.js')).default;
+      const message = await MessageModel.findById(messageId);
+
+      if (message) {
+        const user = activeUsers.find((user) => user.userId === receiverId);
+        if (user) {
+          io.to(user.socketId).emit("reaction-updated", {
+            messageId,
+            reactions: message.reactions
+          });
+        }
+      }
+    } catch (error) {
+      console.log("Error in reaction-added handler:", error);
+    }
+  });
+
   socket.on("display", (data) => {
     if (data.typing == true)
       io.emit("display", { typing: true, user: data.user });
@@ -95,3 +135,4 @@ io.on("connection", (socket) => {
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+

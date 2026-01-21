@@ -23,11 +23,12 @@ const Chat = () => {
   const [sendMessage, setSendMessage] = useState(null); // Define sendMessage state here
   const [receivedMessage, setReceivedMessage] = useState(null);
   const [showUserInfoModal, setShowUserInfoModal] = useState(false); // State to manage modal visibility
+  const [showSidebar, setShowSidebar] = useState(true); // State to manage sidebar visibility on mobile
   const socket = useRef();
   const dispatch = useDispatch();
   const modalRef = useRef();
 
-  
+
 
   // Get the chat in chat section
   // useEffect(() => {
@@ -68,12 +69,13 @@ const Chat = () => {
     };
     try {
       const { data } = await createChat(chat);
-      setCurrentChat(data); 
+      setCurrentChat(data);
+      setShowSidebar(false); // Hide sidebar on mobile when chat is selected
     } catch (error) {
       console.log("Error creating chat: ", error);
     }
   };
-  
+
   // Connect to Socket.io
   useEffect(() => {
     socket.current = io("wss://chat-application-qd00.onrender.com/");
@@ -109,7 +111,7 @@ const Chat = () => {
     const online = onlineUsers.some((user) => user.userId === userMemberId);
     return online;
   };
-  
+
   const handleUserInfoClick = () => {
     setShowUserInfoModal(true);
   };
@@ -131,14 +133,14 @@ const Chat = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  
+
 
   return (
     <div>
       <div className="Chat">
-        <div className="Left-side-chat">
+        <div className={`Left-side-chat ${showSidebar ? 'show-sidebar' : 'hide-sidebar'}`}>
           <h2>Chats</h2>
-          
+
           <div className="chat-list">
             {users.map((user) => (
               <div key={user._id} onClick={(e) => handleSend(e, user)}>
@@ -153,9 +155,14 @@ const Chat = () => {
           <hr style={{ width: "85%", border: "0.1px solid #ececec" }} />
           <div className="logOut-button" onClick={handleSubmit}>log out</div>
         </div>
-        <div className="Right-side-chat">
+        <div className={`Right-side-chat ${!showSidebar ? 'show-chat' : 'hide-chat'}`}>
           <div className="chat-headers">
             <div className="chat-header-left">
+              {currentChat && (
+                <button className="back-button" onClick={() => setShowSidebar(true)}>
+                  <span className="back-arrow">←</span>
+                </button>
+              )}
               <h2>Chat Box</h2>
             </div>
             <div className="user-info" onClick={handleUserInfoClick}>
@@ -163,7 +170,7 @@ const Chat = () => {
                 src={defaultProfileImage}
                 alt="profile"
                 className="followerImage"
-                style={{ width: "20px", height : "20px" }}
+                style={{ width: "20px", height: "20px" }}
               />
               <span>{user.firstname}</span>
               <FontAwesomeIcon icon={showUserInfoModal ? faAngleUp : faAngleDown} />
@@ -175,7 +182,7 @@ const Chat = () => {
             setSendMessage={setSendMessage}
             receivedMessage={receivedMessage}
             socket={socket.current}
-            sendMessage={sendMessage} 
+            sendMessage={sendMessage}
           />
         </div>
       </div>
