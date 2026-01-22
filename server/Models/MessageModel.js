@@ -20,6 +20,10 @@ const MessageSchema = mongoose.Schema({
     replyToText: {
         type: String,
         default: null
+    },
+    seen: {
+        type: Boolean,
+        default: false
     }
 },
     {

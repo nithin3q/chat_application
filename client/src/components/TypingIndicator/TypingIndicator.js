@@ -9,7 +9,8 @@ const TypingIndicator = ({ userName }) => {
                 <div className="typing-dot"></div>
                 <div className="typing-dot"></div>
             </div>
-            {userName && <span className="typing-text">{userName} is typing...</span>}
+            {/* <span className="typing-text">{userName} is typing...</span> */}
+            {/* {userName && <span className="typing-text">{userName} is typing...</span>} */}
         </div>
     );
 };

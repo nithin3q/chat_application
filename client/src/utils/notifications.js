@@ -54,11 +54,25 @@ export const showMessageNotification = (senderName, messageText, onClick) => {
     return notification;
 };
 
-// Play notification sound
+// Play notification sound using Web Audio API (no external file needed)
 export const playNotificationSound = () => {
-    const audio = new Audio("/notification.mp3");
-    audio.volume = 0.5;
-    audio.play().catch((err) => {
+    try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+        oscillator.frequency.value = 800; // Frequency in Hz
+        oscillator.type = "sine";
+
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.3);
+    } catch (err) {
         console.log("Could not play notification sound:", err);
-    });
+    }
 };

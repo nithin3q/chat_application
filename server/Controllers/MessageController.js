@@ -94,3 +94,28 @@ export const addReaction = async (req, res) => {
         res.status(500).json({ error: "Internal server error" });
     }
 };
+
+// Mark messages as seen in a chat
+export const markAsSeen = async (req, res) => {
+    const { chatId, viewerId } = req.params;
+
+    try {
+        // Mark all messages in this chat from other users as seen
+        const result = await MessageModel.updateMany(
+            {
+                chatId,
+                senderId: { $ne: viewerId },
+                seen: false
+            },
+            { $set: { seen: true } }
+        );
+
+        res.status(200).json({
+            success: true,
+            modifiedCount: result.modifiedCount
+        });
+    } catch (error) {
+        console.log("Error in markAsSeen: ", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+};

@@ -2,7 +2,8 @@
     background: var(--cardColor);
     border-radius: 1rem;
     display: grid;
-    grid-template-rows: 14vh 60vh 13vh;
+    grid-template-rows: 14vh 70vh 10vh;
+    position: relative;
 }
 
 .chat-header {
@@ -16,7 +17,8 @@
     flex-direction: column;
     gap: 0.5rem;
     padding: 1.5rem;
-    overflow: auto; /* Use "auto" for both vertical and horizontal scrollbars */
+    overflow: auto;
+    position: relative;
 }
 
 .message-wrapper {
@@ -46,10 +48,22 @@
   position: relative;
 }
 
-.message>span:nth-child(2){
+.message>span:nth-child(2), .message-time {
     font-size: 0.7rem;
     color: var(--textColor);
     align-self: end;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.seen-indicator {
+    font-size: 0.75rem;
+    color: gray;
+}
+
+.seen-indicator.seen {
+    color: #1DA1F2; /* Blue color for seen */
 }
 
 .own {
@@ -67,22 +81,57 @@
     background: white;
     display: flex;
     justify-content: space-between;
-    height: 3.5rem;
+    min-height: 3.5rem;
+    max-height: 8rem;
     align-items: center;
-    gap: 1rem;
-    padding: 0.8rem;
+    /* gap: 1rem; */
+    padding: 0.4rem;
     border-radius: 1rem;
     align-self: end;
+    z-index: 999;
 }
 .chat-sender>input{
-    height: 70%;
+    height: auto;
+    min-height: 2rem;
     background-color: rgb(236, 236, 236);
     border-radius: 0.5rem;
     border: none;
     outline: none;
-    flex  :1 ;
+    flex: 1;
     font-size: 14px;
-    padding: 0px 15px 0px 15px;
+    padding: 8px 15px;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+}
+
+/* Override react-input-emoji styles for text wrapping */
+.chat-sender .react-input-emoji--container {
+    flex: 1;
+    min-width: 0;
+    max-width: calc(100% - 40px);
+}
+
+.chat-sender .react-input-emoji--wrapper {
+    flex: 1;
+    min-width: 0;
+}
+
+.chat-sender .react-input-emoji--input {
+    max-height: 100px;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    word-wrap: break-word !important;
+    word-break: break-all !important;
+    white-space: pre-wrap !important;
+    overflow-wrap: break-word !important;
+}
+
+/* Target the contenteditable div inside */
+.chat-sender .react-input-emoji--input[contenteditable] {
+    word-break: break-all !important;
+    white-space: pre-wrap !important;
+    overflow-wrap: break-word !important;
 }
 .chat-sender>div:nth-of-type(1)
 {
@@ -96,7 +145,7 @@
 }
 .chat-sender>div{
     height: 100%;
-    padding: 0px 15px 0px 15px;
+    padding: 0px 5px 0px 5px;
 }
 .button{
     display: flex;

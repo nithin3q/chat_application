@@ -103,6 +103,8 @@ io.on("connection", (socket) => {
 
   // Reaction events
   socket.on("reaction-added", async (data) => {
+    console.log("=== REACTION-ADDED EVENT RECEIVED ===");
+    console.log("Data:", data);
     const { receiverId, messageId } = data;
 
     try {
@@ -128,6 +130,21 @@ io.on("connection", (socket) => {
     if (data.typing == true)
       io.emit("display", { typing: true, user: data.user });
     else io.emit("display", { typing: false });
+  });
+
+  // Messages seen event
+  socket.on("messages-seen", (data) => {
+    const { chatId, senderId, viewerId } = data;
+    console.log("Messages seen event:", data);
+
+    // Notify the sender that their messages have been seen
+    const sender = activeUsers.find((user) => user.userId === senderId);
+    if (sender) {
+      io.to(sender.socketId).emit("messages-marked-seen", {
+        chatId,
+        viewerId
+      });
+    }
   });
 });
 

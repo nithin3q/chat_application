@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { getUser } from "../../api/UserRequest";
 import defaultProfileImage from "../../images/defaultProfile.png";
-import { addMessage, getMessages, addReaction } from "../../api/MessageRequests";
+import { addMessage, getMessages, addReaction, markMessagesSeen } from "../../api/MessageRequests";
 import { format } from "timeago.js";
 import "./ChatBox.css";
 import InputEmoji from "react-input-emoji";
@@ -25,7 +25,7 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, socket })
   const lastTapRef = useRef(null);
   const selectedMessageRef = useRef(null); // Ref to store selected message ID synchronously
 
-  const handleChange = (newMessage) => {
+  const handleChange = useCallback((newMessage) => {
     setNewMessage(newMessage);
 
     // Emit typing-start event
@@ -51,7 +51,7 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, socket })
         });
       }, 2000);
     }
-  };
+  }, [chat, socket, currentUser]);
 
   useEffect(() => {
     if (chat) {
@@ -88,6 +88,33 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, socket })
   useEffect(() => {
     scroll.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Auto-scroll when typing indicator appears
+  useEffect(() => {
+    if (isTyping) {
+      scroll.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [isTyping]);
+
+  // Mark messages as seen when chat opens or receives messages
+  useEffect(() => {
+    if (chat && currentUser && socket) {
+      const senderId = chat.members.find((id) => id !== currentUser);
+
+      markMessagesSeen(chat._id, currentUser)
+        .then(() => {
+          // Emit socket event to notify sender in real-time
+          socket.emit("messages-seen", {
+            chatId: chat._id,
+            senderId,
+            viewerId: currentUser
+          });
+        })
+        .catch(err => {
+          console.log("Error marking messages as seen:", err);
+        });
+    }
+  }, [chat, currentUser, messages, socket]);
 
   const handleSend = async () => {
     if (!newMessage.trim()) return;
@@ -138,8 +165,8 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, socket })
     if (receivedMessage !== null && chat && receivedMessage.chatId === chat._id) {
       setMessages((prevMessages) => [...prevMessages, receivedMessage]);
 
-      // Show notification and play sound for received messages
-      if (receivedMessage.senderId !== currentUser && userData) {
+      // Show notification and play sound for received messages only when tab is not focused
+      if (receivedMessage.senderId !== currentUser && userData && !document.hasFocus()) {
         showMessageNotification(
           `${userData.firstname} ${userData.lastname}`,
           receivedMessage.text
@@ -173,6 +200,28 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, socket })
       socket.off("user-stopped-typing", handleUserStoppedTyping);
     };
   }, [socket, chat]);
+
+  // Listen for messages-marked-seen event
+  useEffect(() => {
+    if (!socket || !chat) return;
+
+    const handleMessagesSeen = (data) => {
+      if (data.chatId === chat._id) {
+        // Update all own messages to seen status
+        setMessages(prevMessages =>
+          prevMessages.map(msg =>
+            msg.senderId === currentUser ? { ...msg, seen: true } : msg
+          )
+        );
+      }
+    };
+
+    socket.on("messages-marked-seen", handleMessagesSeen);
+
+    return () => {
+      socket.off("messages-marked-seen", handleMessagesSeen);
+    };
+  }, [socket, chat, currentUser]);
 
   // Handle double-tap to like
   const handleDoubleTap = async (e, message) => {
@@ -324,21 +373,8 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, socket })
                       // Double tap - add ❤️ reaction
                       handleDoubleTap(e, message);
                     } else {
-                      // Single click behavior depends on message type
-                      if (message.senderId === currentUser) {
-                        // Own message - set as reply
-                        setReplyToMessage(message);
-                      } else {
-                        // Opponent message - show reaction picker
-                        // Debug: check message object
-                        console.log("Message object:", message);
-                        console.log("message._id:", message._id);
-                        console.log("message.id:", message.id);
-                        // Set ref FIRST before any other operations
-                        selectedMessageRef.current = message._id;
-                        console.log("Setting ref to:", message._id);
-                        handleLongPress(e, message);
-                      }
+                      // Single click - set as reply for ALL messages
+                      setReplyToMessage(message);
                     }
                     lastTapRef.current = now;
                   }}
@@ -362,7 +398,14 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, socket })
                   )}
 
                   <span>{message.text}</span>
-                  <span>{format(message.createdAt)}</span>
+                  <span className="message-time">
+                    {format(message.createdAt)}
+                    {message.senderId === currentUser && (
+                      <span className={`seen-indicator ${message.seen ? 'seen' : ''}`}>
+                        {message.seen ? ' ✓✓' : ' ✓'}
+                      </span>
+                    )}
+                  </span>
                 </div>
 
                 {/* Display reactions */}
@@ -392,6 +435,7 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage, socket })
                 )}
               </div>
             ))}
+            {/* Typing Indicator - absolute positioned inside chat-body */}
             {isTyping && <TypingIndicator userName={userData?.firstname} />}
           </div>
 
