@@ -1,29 +1,29 @@
 const [loading, setLoading] = useState(false);
-	const [conversations, setConversations] = useState([]);
+const [conversations, setConversations] = useState([]);
 
-	useEffect(() => {
-		const getConversations = async () => {
-			setLoading(true);
-			try {
-				const res = await fetch("/api/users");
-				const data = await res.json();
-				if (data.error) {
-					throw new Error(data.error);
-				}
-				setConversations(data);
-			} catch (error) {
-				toast.error(error.message);
-			} finally {
-				setLoading(false);
-			}
-		};
+useEffect(() => {
+  const getConversations = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/users");
+      const data = await res.json();
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      setConversations(data);
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-		getConversations();
-	}, []);
+  getConversations();
+}, []);
 
 
 
-    import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useSelector } from "react-redux";
 import "./Chat.css";
@@ -76,7 +76,7 @@ const Chat = () => {
 
   // Connect to Socket.io
   useEffect(() => {
-    socket.current = io("ws://localhost:8800");
+    socket.current = io("ws://chat-application-qd00.onrender.com");
     socket.current.emit("new-user-add", user._id);
     socket.current.on("get-users", (users) => {
       setOnlineUsers(users);

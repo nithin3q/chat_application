@@ -27,7 +27,7 @@ const Chat = () => {
   const dispatch = useDispatch();
   const modalRef = useRef();
 
-  
+
 
   // Get the chat in chat section
   useEffect(() => {
@@ -68,15 +68,15 @@ const Chat = () => {
     };
     try {
       const { data } = await createChat(chat);
-      setCurrentChat(data); 
+      setCurrentChat(data);
     } catch (error) {
       console.log("Error creating chat: ", error);
     }
   };
-  
+
   // Connect to Socket.io
   useEffect(() => {
-    socket.current = io("ws://localhost:8800");
+    socket.current = io("ws://chat-application-qd00.onrender.com");
     socket.current.emit("new-user-add", user._id);
     socket.current.on("get-users", (users) => {
       setOnlineUsers(users);
@@ -109,7 +109,7 @@ const Chat = () => {
     const online = onlineUsers.some((user) => user.userId === userMemberId);
     return online;
   };
-  
+
   const handleUserInfoClick = () => {
     setShowUserInfoModal(true);
   };
@@ -131,14 +131,14 @@ const Chat = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  
+
 
   return (
     <div>
       <div className="Chat">
         <div className="Left-side-chat">
           <h2>Chats</h2>
-          
+
           <div className="chat-list">
             {users.map((user) => (
               <div key={user._id} onClick={(e) => handleSend(e, user)}>
@@ -163,7 +163,7 @@ const Chat = () => {
                 src={defaultProfileImage}
                 alt="profile"
                 className="followerImage"
-                style={{ width: "20px", height : "20px" }}
+                style={{ width: "20px", height: "20px" }}
               />
               <span>{user.firstname}</span>
               <FontAwesomeIcon icon={showUserInfoModal ? faAngleUp : faAngleDown} />
@@ -175,7 +175,7 @@ const Chat = () => {
             setSendMessage={setSendMessage}
             receivedMessage={receivedMessage}
             socket={socket.current}
-            sendMessage={sendMessage} 
+            sendMessage={sendMessage}
           />
         </div>
       </div>
